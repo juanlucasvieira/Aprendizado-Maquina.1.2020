@@ -20,6 +20,7 @@ from skmultiflow.meta import AdaptiveRandomForestRegressor
 from skmultiflow.evaluation import EvaluatePrequential
 
 from skmultiflow.meta.multi_output_learner import MultiOutputLearner
+from skmultiflow.meta import RegressorChain
 
 import argparse
 
@@ -35,6 +36,8 @@ parser.add_argument('-s', '--samples', action='store', default=44641, type=int, 
                     help='Samples to process. Default: all samples')
 parser.add_argument('-p', '--plot', action='store_true', default=False, dest='show_plot',
                     help='Display plot. Only available with one label.')
+parser.add_argument('-rc', '--regressorchain', action='store_true', default=False, dest='chained',
+                    help='Use regressor chain instead of binary relevance')
 
 args = parser.parse_args()
 
@@ -69,15 +72,22 @@ else:
         parser.print_usage()
         exit()
 
-
+mode = None
 if not args.all_ap:
         #evaluator = EvaluatePrequential(output_file=model_name+"_eval_one_label.txt",show_plot=args.show_plot, pretrain_size=200, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error'])
         evaluator = EvaluatePrequential(output_file=model_name+"_eval_one_label_v2.txt",show_plot=args.show_plot, n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error','running_time','model_size'])
         evaluator.evaluate(stream=stream, model=model, model_names=[model_name])
 else:
         # For Multi-AP approach
-        multiOutputModel = MultiOutputLearner(base_estimator=model)
+        if args.chained:
+                print("Using Regressor Chain for Multi-label")
+                multiOutputModel = RegressorChain(model, random_state=1)
+                mode = "rc"
+        else:
+                print("Using Binary Relevance for Multi-label")
+                multiOutputModel = MultiOutputLearner(base_estimator=model)
+                mode = "br"
 
-        evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels_v2.txt", n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error','running_time','model_size'])
+        evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels_v2_"+mode+".txt", n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error','running_time'])
         #evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels.txt", pretrain_size=200, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error'])
         evaluator.evaluate(stream=stream, model=multiOutputModel, model_names=['MultiOutput'+model_name])
