@@ -1,0 +1,16 @@
+# TEST CONFIGURATION BEGIN
+# FileStream(filename='dataset-2001-10.csv', target_idx=4, n_targets=387, cat_features=None)
+# [MultiOutputARF] MultiOutputLearner(base_estimator=AdaptiveRandomForestRegressor(aggregation_method='median', binary_split=False, drift_detection_criteria='mse', drift_detection_method=ADWIN(delta=0.001), grace_period=50, lambda_value=6, leaf_prediction='perceptron', learning_ratio_const=True, learning_ratio_decay=0.001, learning_ratio_perceptron=0.1, max_byte_size=1048576000, max_features='auto', memory_estimate_period=2000000, n_estimators=1, no_preprune=False, nominal_attributes=None, random_state=123456, remove_poor_atts=False, split_confidence=0.01, stop_mem_management=False, tie_threshold=0.05, warning_detection_method=ADWIN(delta=0.01), weighted_vote_strategy=None))
+# EvaluatePrequential(batch_size=60, data_points_for_classification=False, max_samples=44641, max_time=inf, metrics=['average_mean_square_error', 'average_mean_absolute_error', 'running_time', 'model_size'], n_wait=60, output_file='ARF_eval_all_labels_v3.txt', pretrain_size=60, restart_stream=True, show_plot=False)
+# TEST CONFIGURATION END
+id,mean_amse_[MultiOutputARF],current_amse_[MultiOutputARF],mean_amae_[MultiOutputARF],current_amae_[MultiOutputARF],training_time_[MultiOutputARF],testing_time_[MultiOutputARF],total_running_time_[MultiOutputARF],model_size_[MultiOutputARF]
+60,0.205044,0.205044,0.169594,0.169594,25.816063,0.781376,26.597439,7828.350586
+120,0.198263,0.191481,0.159441,0.149287,38.746591,1.660031,40.406621,8699.420898
+180,0.165632,0.100372,0.143956,0.112986,52.316672,2.551123,54.867795,8805.170898
+240,0.137466,0.052969,0.126951,0.075939,67.738023,3.546011,71.284035,9272.342773
+300,0.114482,0.022545,0.111076,0.047575,81.673967,4.460974,86.134941,10307.866211
+360,0.099590,0.025132,0.100386,0.046934,95.886452,5.382992,101.269444,10567.573242
+420,0.106638,0.148923,0.102681,0.116453,109.704602,6.482352,116.186954,10972.791992
+480,0.246385,1.224616,0.130960,0.328915,125.363311,7.408201,132.771511,10927.557617
+540,0.292305,0.659663,0.154800,0.345521,143.893380,8.362825,152.256204,11203.034180
+600,0.339802,0.767272,0.172722,0.334019,161.798998,9.353626,171.152623,12346.666992

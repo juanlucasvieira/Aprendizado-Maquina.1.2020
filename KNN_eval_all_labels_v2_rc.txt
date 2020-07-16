@@ -1,0 +1,14 @@
+# TEST CONFIGURATION BEGIN
+# FileStream(filename='dataset-2001-10.csv', target_idx=4, n_targets=387, cat_features=None)
+# [MultiOutputKNN] RegressorChain(base_estimator=KNNRegressor(aggregation_method='mean', leaf_size=30, max_window_size=1000, metric='euclidean', n_neighbors=5), order=None, random_state=1)
+# EvaluatePrequential(batch_size=60, data_points_for_classification=False, max_samples=44641, max_time=inf, metrics=['average_mean_square_error', 'average_mean_absolute_error', 'running_time', 'model_size'], n_wait=60, output_file='KNN_eval_all_labels_v2_rc.txt', pretrain_size=60, restart_stream=True, show_plot=False)
+# TEST CONFIGURATION END
+id,mean_amse_[MultiOutputKNN],current_amse_[MultiOutputKNN],mean_amae_[MultiOutputKNN],current_amae_[MultiOutputKNN],training_time_[MultiOutputKNN],testing_time_[MultiOutputKNN],total_running_time_[MultiOutputKNN],model_size_[MultiOutputKNN]
+60,0.166629,0.166629,0.151488,0.151488,1.788631,30.893419,32.682050,367352.805664
+120,0.148012,0.129394,0.138081,0.124674,3.562886,84.316341,87.879227,550900.618164
+180,0.136185,0.112531,0.129637,0.112750,5.180888,159.217670,164.398558,734436.211914
+240,0.112451,0.041250,0.110801,0.054291,7.015648,241.204609,248.220257,917991.993164
+300,0.091584,0.008117,0.091777,0.015680,9.299167,359.137278,368.436444,1101555.711914
+360,0.079041,0.016323,0.079685,0.019228,11.807454,493.418476,505.225931,1285132.211914
+420,0.090560,0.159676,0.083566,0.106852,14.339215,639.128009,653.467225,1468661.430664
+480,0.255022,1.406256,0.119161,0.368327,17.171171,795.612846,812.784017,1652231.524414
