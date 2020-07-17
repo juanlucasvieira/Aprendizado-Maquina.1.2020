@@ -5,9 +5,12 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.dummy import DummyRegressor
+from sklearn.base import clone
 from sklearn.model_selection import cross_validate, cross_val_predict
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.multioutput import RegressorChain
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
@@ -93,11 +96,13 @@ def timeSeriesSplitCV(model, X, y, splits, plotGraph=False):
         X_train, X_test = X.iloc[train_index], X.iloc[test_index]
         y_train, y_test = y.iloc[train_index], y.iloc[test_index]
         # print(y_train)
-        model.fit(X_train,y_train)
-        predicted = model.predict(X_test)
+        clone_model = clone(model) # Clone model to keep splits separated from each other
+        clone_model.fit(X_train,y_train)
+        predicted = clone_model.predict(X_test)
         mse, mae = evaluateMSEandMAE(y_test,predicted)
         mse_values.append(mse)
         mae_values.append(mae)
+        clone_model = None
         #print(train_index)
         #print(y_test)
 
@@ -129,6 +134,10 @@ parser.add_argument('-p', '--plot', action='store_true', default=False, dest='sh
                     help='Display plot. Only available with one label.')
 parser.add_argument('-s', '--splits', action='store', default=4, type=int, dest='split_num',
                     help='Number of splits to make in the Time Split Cross Validation.')
+parser.add_argument('-rc', '--regressorchain', action='store_true', default=False, dest='chained',
+                    help='Use regressor chain.')
+parser.add_argument('-br', '--multioutput', action='store_true', default=False, dest='binary',
+                    help='Use binary relevance')
 
 args = parser.parse_args()
 
@@ -179,6 +188,17 @@ else:
         y = dataframe.loc[:,"AcadBldg10AP1":"SocBldg9AP1"] # ALL APS
 
 #print(dataframe.head(-1))
+
+if args.chained:
+        print("Using Regressor Chain")
+        model = RegressorChain(model, random_state=1)
+        mode = "rc"
+elif args.binary:
+        print("Using Binary Relevance")
+        model = MultiOutputRegressor(model)
+        mode = "br"
+else:
+        print("Using Raw Model")
 
 timeSeriesSplitCV(model,X,y,args.split_num,args.show_plot)
 
