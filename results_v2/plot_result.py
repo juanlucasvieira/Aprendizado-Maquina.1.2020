@@ -9,7 +9,7 @@ import argparse
 import matplotlib.ticker as ticker
 from sklearn.preprocessing import minmax_scale
 
-def plot_results(index, knn_values, hat_values, arf_values, titletxt):
+def plot_results(index, knn_values, hat_values, arf_values, titletxt, samples):
     plt.rcParams['figure.figsize'] = 10, 6
     #ax.set_xticklabels('Monday', 'Tuesday')
     
@@ -51,9 +51,9 @@ def plot_results(index, knn_values, hat_values, arf_values, titletxt):
     plt.plot(index, arf["current_amse_[MultiOutputARF]"].iloc[:len(index)], label="Average Mean Squared Error (Current)")
     plt.plot(index, arf["current_amae_[MultiOutputARF]"].iloc[:len(index)], label="Average Mean Absolute Error (Current)")
     # plt.plot(index, arf["mean_amse_[MultiOutputARF]"], label="ARF AMSE (Mean)")
-
-    print(titletxt, "AMSE -","KNN",knn["mean_amse_[MultiOutputKNN]"].iloc[-1],"HAT",hat["mean_amse_[MultiOutputHAT]"].iloc[-1],"ARF",arf["mean_amse_[MultiOutputARF]"].iloc[-1])
-    print(titletxt, "AMAE -","KNN",knn["mean_amae_[MultiOutputKNN]"].iloc[-1],"HAT",hat["mean_amae_[MultiOutputHAT]"].iloc[-1],"ARF",arf["mean_amae_[MultiOutputARF]"].iloc[-1])
+    print(knn.loc[knn['id'] == samples,["mean_amse_[MultiOutputKNN]"]].to_string(index=False,header=False))
+    print(titletxt, "AMSE -","KNN:",knn.loc[knn['id'] == samples,["mean_amse_[MultiOutputKNN]"]].to_string(index=False,header=False),"| HAT:",hat.loc[hat['id'] == samples,["mean_amse_[MultiOutputHAT]"]].to_string(index=False,header=False),"| ARF:",arf.loc[arf['id'] == samples,["mean_amse_[MultiOutputARF]"]].to_string(index=False,header=False))
+    print(titletxt, "AMAE -","KNN:",knn.loc[knn['id'] == samples,["mean_amae_[MultiOutputKNN]"]].to_string(index=False,header=False),"| HAT:",hat.loc[hat['id'] == samples,["mean_amae_[MultiOutputHAT]"]].to_string(index=False,header=False),"| ARF:",arf.loc[arf['id'] == samples,["mean_amae_[MultiOutputARF]"]].to_string(index=False,header=False))
 
     plt.legend(ncol=2)
     plt.show()
@@ -107,7 +107,7 @@ if args.plot_rc:
 else:
     plot_title = "Multi Output Evaluation (" + str(min_samples) + " samples)"
 
-plot_results(index,knn,hat,arf,plot_title)
+plot_results(index,knn,hat,arf,plot_title, min_samples)
 
 exit()
 

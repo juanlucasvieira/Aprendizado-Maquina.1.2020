@@ -1,23 +1,11 @@
-# import pandas as pd
 from skmultiflow.data import FileStream
-# from sklearn.linear_model import LinearRegression
-# from sklearn.neighbors import KNeighborsRegressor
-# from sklearn.ensemble import RandomForestRegressor
-# from sklearn.model_selection import TimeSeriesSplit
-# from sklearn.tree import DecisionTreeRegressor
-
-# from sklearn.model_selection import cross_validate, cross_val_predict
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import mean_absolute_error, mean_squared_error
-# import matplotlib.pyplot as plt
-# import numpy as np
-# from numpy import absolute, mean, std
 
 from skmultiflow.trees import HoeffdingAdaptiveTreeRegressor
 from skmultiflow.lazy import KNNRegressor
 from skmultiflow.meta import AdaptiveRandomForestRegressor
 
 from skmultiflow.evaluation import EvaluatePrequential
+from skmultiflow.evaluation import EvaluateHoldout
 
 from skmultiflow.meta.multi_output_learner import MultiOutputLearner
 from skmultiflow.meta import RegressorChain
@@ -38,6 +26,8 @@ parser.add_argument('-p', '--plot', action='store_true', default=False, dest='sh
                     help='Display plot. Only available with one label.')
 parser.add_argument('-rc', '--regressorchain', action='store_true', default=False, dest='chained',
                     help='Use regressor chain instead of binary relevance')
+parser.add_argument('-ht', '--holdout', action='store_true', default=False, dest='holdout',
+                    help='Use holdout instead of prequential')
 
 args = parser.parse_args()
 
@@ -72,10 +62,14 @@ else:
         parser.print_usage()
         exit()
 
+evaluator = None
 mode = None
 if not args.all_ap:
         #evaluator = EvaluatePrequential(output_file=model_name+"_eval_one_label.txt",show_plot=args.show_plot, pretrain_size=200, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error'])
-        evaluator = EvaluatePrequential(output_file=model_name+"_eval_one_label_v2.txt",show_plot=args.show_plot, n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error','running_time','model_size'])
+        if args.holdout:
+                evaluator = EvaluateHoldout(output_file=model_name+"_eval_one_label_v2_holdout.txt",show_plot=args.show_plot, n_wait=60, test_size=60, batch_size=60, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error'])
+        else:
+                evaluator = EvaluatePrequential(output_file=model_name+"_eval_one_label_v2.txt",show_plot=args.show_plot, n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['true_vs_predicted','mean_square_error','mean_absolute_error','running_time','model_size'])
         evaluator.evaluate(stream=stream, model=model, model_names=[model_name])
 else:
         # For Multi-AP approach
@@ -88,6 +82,9 @@ else:
                 multiOutputModel = MultiOutputLearner(base_estimator=model)
                 mode = "br"
 
-        evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels_v2_"+mode+".txt", n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error','running_time'])
+        if args.holdout:
+                evaluator = EvaluateHoldout(output_file=model_name+"_eval_one_label_v2_holdout_"+mode+".txt",show_plot=args.show_plot, n_wait=60, test_size=60, batch_size=60, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error','running_time'])
+        else:
+                evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels_v2_"+mode+".txt", n_wait=60, pretrain_size=60, batch_size=60, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error','running_time'])
         #evaluator = EvaluatePrequential(output_file=model_name+"_eval_all_labels.txt", pretrain_size=200, max_samples=max_samples, metrics=['average_mean_square_error','average_mean_absolute_error'])
         evaluator.evaluate(stream=stream, model=multiOutputModel, model_names=['MultiOutput'+model_name])
