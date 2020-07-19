@@ -65,7 +65,7 @@ parser = argparse.ArgumentParser(description='Result Plot Script')
 parser.add_argument('-rc', '--regressorchain', action='store_true', default=False, dest='plot_rc',
                     help='Plot regressor chain evaluation. Default = Binary Relevance.')
 parser.add_argument('-s', '--samples', action='store', default=-1, type=int, dest='samples',
-                    help='Number of splits to plot.')
+                    help='Number of samples to plot.')
 
 args = parser.parse_args()
 
