@@ -1,3 +1,5 @@
 The dataset used for this work is available at: https://crawdad.org/dartmouth/campus/20090909
 
 David Kotz, Tristan Henderson, Ilya Abyzov, Jihwang Yeo, CRAWDAD dataset dartmouth/campus (v. 2009‑09‑09), downloaded from https://crawdad.org/dartmouth/campus/20090909, https://doi.org/10.15783/C7F59T, Sep 2009.
+
+The used portion of the dataset was the Syslog data of October of 2001, available at the directory syslog-v3.3, files from 20011001.log.gz to 20011031.log.gz
