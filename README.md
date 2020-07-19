@@ -10,6 +10,12 @@ David Kotz, Tristan Henderson, Ilya Abyzov, Jihwang Yeo, CRAWDAD dataset dartmou
 
 The used portion of the dataset was the Syslog data of October of 2001, available at the directory syslog-v3.3, files from 20011001.log.gz to 20011031.log.gz
 
+## Generated Dataset
+
+The generated dataset is available at the [dataset-2001-10.csv](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/dataset-2001-10.csv) file.
+
+![dataset_plot](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/plots/final/dataset_plot.png)
+
 ## Scripts
 
 - [build_dataset.py](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/build_dataset.py)
@@ -93,3 +99,17 @@ Optional arguments:
   -s SAMPLES, --samples SAMPLES
                         Number of samples to plot.
 ```
+
+## Plot Examples
+
+- **Dummy Regressor with Time Split Validation**
+
+![Dummy Time Split Validation](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/plots/time-split-dummy.png)
+
+- **KNN Regressor with Time Split Validation**
+
+![KNN Time Split Validation](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/plots/time-split-knn.png)
+
+- **Result of KNN, ARF and HAT using Multi Output Learner**
+
+![KNN, ARF and HAT result](https://github.com/juanlucasvieira/Aprendizado-Maquina.1.2020/blob/master/plots/final/result_br.png)
